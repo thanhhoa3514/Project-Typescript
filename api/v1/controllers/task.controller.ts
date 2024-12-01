@@ -158,3 +158,25 @@ export const changeStatusMulti= async(req: Request, res: Response)=>{
       }
 
 };
+
+// [PATCH] /api/v1/tasks/change-multi
+
+export const createTask= async(req: Request, res: Response)=>{
+    
+    try {
+       
+        const newTask = new Task(req.body);
+        newTask.save();
+        res.json({
+          code: 200,
+          message: "Create task success",
+        });
+      } catch (error) {
+        console.error('Error:', error); // Log the error for debugging
+        res.status(500).json({
+          code: 500,
+          message: 'Internal Server Error',
+        });
+      }
+
+};
