@@ -41,3 +41,39 @@ export const register = async (req: Request, res: Response): Promise<void> => {
         return;
     }
 };
+
+// [POST] /api/v1/users/login
+export const login= async(req: Request, res: Response): Promise<void> => {
+    try {
+        
+        const email = req.body.email;
+        const password = req.body.password;
+        const userExists = await User.findOne({ email: email,deleted: false});
+        if (!userExists) {
+            res.status(404).send({
+                message: "User not found"
+            });
+            return;
+        }
+    
+    
+        // Compare passwords
+        const passwordMatch = await bcrypt.compare(password, userExists.password!);
+        if(!passwordMatch) {
+            res.status(401).send({
+                message: "Invalid password"
+            });
+            return;
+        } 
+        
+        res.status(200).send({
+            message: "User logged in successfully",
+            token: userExists.token
+        });
+    } catch (error) {
+        console.error('Login error:', error);
+        res.status(500).send({
+            message: "Internal server error"
+        });
+    }
+};
