@@ -10,7 +10,9 @@ dotenv.config();
 database.connect();
 const app:Express = express();
 const port:string|number = process.env.PORT||3000;
+app.use(express.json());
 
+app.use(express.urlencoded({ extended: false }))
 
 mainV1Routes(app);
 app.listen(port, () => {
