@@ -99,3 +99,62 @@ export const changeStatus= async(req: Request, res: Response)=>{
       }
 
 };
+
+
+// [PATCH] /api/v1/tasks/change-multi
+
+export const changeStatusMulti= async(req: Request, res: Response)=>{
+    enum Status{
+        STATUS_ACTIVE = 'status',
+        STATUS_DELETED = 'deleted',
+    }
+    try {
+        const ids:string[] =req.body.ids;
+        const key:string=req.body.key;
+        const value:string=req.body.value;
+    
+        switch (key) {
+          case Status.STATUS_ACTIVE:
+            await Task.updateMany({
+              _id: { $in: ids },
+    
+            }, {
+              status: value
+            });
+            res.json({
+              code: 200,
+              message: "Change status multi success",
+            });
+            break;
+          case Status.STATUS_DELETED:
+            await Task.updateMany({
+              _id: {
+                $in: ids
+              }
+            }, {
+              delete: true,
+              deletedAt: new Date()
+            })
+            res.json({
+              code: 200,
+              message: "Delete status multi success",
+            });
+            break;
+          default:
+            res.status(400).json({
+                code: 400,
+                message: "Invalid status"
+            });
+
+            break;
+        }
+    
+      } catch (error) {
+        console.error('Error:', error); // Log the error for debugging
+        res.status(500).json({
+          code: 500,
+          message: 'Internal Server Error',
+        });
+      }
+
+};
