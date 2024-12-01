@@ -16,7 +16,26 @@ export const index= async (req:Request, res:Response) => {
     if(req.query.status){
         find.status = req.query.status.toString();
     }
-    const tasks = await Task.find(find);
+    // END: Find
+    // Sort
+    interface SortObject {
+        [key: string]: 'asc' | 'desc' | 1 | -1;
+
+    }
+    const sort:SortObject={};
+    if(req.query.sortKey&&req.query.sortValue){
+        const sortKey = req.query.sortKey as string;
+        const sortValue = req.query.sortValue as string;
+        // Validate the sort value
+        if (sortValue === 'asc' || sortValue === 'desc' || sortValue === '1' || sortValue === '-1') {
+            sort[sortKey] = 
+            sortValue === 'asc' ? 1 :
+            sortValue === 'desc' ? -1 :
+            sortValue === '1' ? 1 : -1;
+        } 
+
+    }
+    const tasks = await Task.find(find).sort(sort);
 
     res.json(tasks);
 }
