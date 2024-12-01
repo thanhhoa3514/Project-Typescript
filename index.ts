@@ -16,7 +16,16 @@ app.get("/task", async (req:Request, res:Response) => {
     console.log(tasks);
     res.json(tasks);
 });
+app.get("/task/detail/:id", async (req:Request, res:Response) => {
+    const id:string = req.params.id;
 
+    const tasks = await Task.find({
+        _id: id,
+
+    });
+    console.log(tasks);
+    res.json(tasks);
+});
 app.listen(port, () => {
     console.log(`Server is running at http://localhost:${port}`);
 });
