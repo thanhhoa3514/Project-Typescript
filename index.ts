@@ -2,7 +2,7 @@
 import express,{Express} from "express";
 import dotenv from "dotenv"
 import * as database from "./config/database";
-
+import cors from "cors";
 // routes
 import mainV1Routes from "./api/v1/routes/index.route"
 
@@ -13,6 +13,10 @@ const port:string|number = process.env.PORT||3000;
 app.use(express.json());
 
 app.use(express.urlencoded({ extended: false }))
+app.use(cors({
+    methods: ['GET', 'POST', 'PUT', 'DELETE','PATCH'],
+    allowedHeaders: ['Content-Type', 'Authorization']
+}));
 
 mainV1Routes(app);
 app.listen(port, () => {

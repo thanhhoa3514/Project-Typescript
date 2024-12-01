@@ -106,7 +106,7 @@ export const changeStatus= async(req: Request, res: Response)=>{
 export const changeStatusMulti= async(req: Request, res: Response)=>{
     enum Status{
         STATUS_ACTIVE = 'status',
-        STATUS_DELETED = 'deleted',
+        STATUS_DELETED = 'delete',
     }
     try {
         const ids:string[] =req.body.ids;

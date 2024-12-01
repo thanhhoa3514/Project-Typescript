@@ -2,8 +2,9 @@
     "compilerOptions": {
       "target": "ES2020",
       "module": "commonjs",
-      "strict": true,
+      "strict": true, // Check for strict mode
       "esModuleInterop": true, // user imports instead of require module
+      "forceConsistentCasingInFileNames": true, // Note that this name is deprecated
       "outDir": "./dist",
       "removeComments": true,
     },
