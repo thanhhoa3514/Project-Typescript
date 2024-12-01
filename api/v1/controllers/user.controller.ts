@@ -78,17 +78,13 @@ export const login= async(req: Request, res: Response): Promise<void> => {
     }
 };
 
-// [GET] /api/v1/users/info/:id
-export const detail= async(req: Request, res: Response): Promise<void> => {
+// [GET] /api/v1/users/info
+export const detail= async(req: Request& { user?: any }, res: Response): Promise<void> => {
     try {
-        
-       const id:string = req.params.id;
-        const user = await User.findOne({ _id:id,deleted: false}).select("-password -token");
-        
         res.status(200).send({
             message: "User logged in successfully",
             //token: userExists.token
-            user:user
+            user:req.user
         });
     } catch (error) {
         console.error('Login error:', error);
