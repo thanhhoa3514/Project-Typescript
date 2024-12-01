@@ -159,7 +159,7 @@ export const changeStatusMulti= async(req: Request, res: Response)=>{
 
 };
 
-// [PATCH] /api/v1/tasks/change-multi
+// [POST] /api/v1/tasks/create
 
 export const createTask= async(req: Request, res: Response)=>{
     
@@ -178,5 +178,28 @@ export const createTask= async(req: Request, res: Response)=>{
           message: 'Internal Server Error',
         });
       }
+
+};
+
+
+// [PATCH] /api/v1/tasks/edit/:id
+
+export const edit= async(req: Request, res: Response)=>{
+    
+    try {
+      const id=req.params.id;
+      await Task.updateOne({
+        _id: id,
+      }, req.body);
+      res.json({
+        code: 200,
+        message: "Task has been edited successfully",
+      });
+    } catch (error) {
+      res.json({
+        code: 400,
+        message: "Something went wrong",
+      });
+    }
 
 };
