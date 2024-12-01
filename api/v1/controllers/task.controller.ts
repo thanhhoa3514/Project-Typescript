@@ -2,11 +2,12 @@ import {Request,Response} from "express";
 
 import Task from "../models/task.model";
 import paginationHelper from "../../../helpers/pagination";
-
+import searchHelpers from "../../../helpers/search";
 export const index= async (req:Request, res:Response) => {
     interface Find{
-        deleted: boolean;
-        status?: string;
+        deleted: boolean,
+        status?: string,
+        title?: RegExp,
     }
     let find:Find={
         deleted: false,
@@ -37,8 +38,9 @@ export const index= async (req:Request, res:Response) => {
     }
 
     // END: Sort
+    // Pagination
     const countTotalItems = await Task.countDocuments(find);
-
+    
     let objectPagination = paginationHelper(
         {
         currentPage: 1,
@@ -47,6 +49,13 @@ export const index= async (req:Request, res:Response) => {
         req.query,
         countTotalItems
     );
+    // End pagination
+    // SEARCH
+    const objectSearch = searchHelpers(req.query as any);
+
+    if (objectSearch.regex) {
+        find.title = objectSearch.regex;
+    }
     const tasks = await Task.find(find).sort(sort).limit(objectPagination.limitItems).skip(objectPagination.skip||0);
 
     res.json(tasks);
